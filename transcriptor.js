@@ -1,7 +1,15 @@
-transcript.addEventListener('click', transcriptButtonOnclick);
+transcript.addEventListener('click', transcriptButtonOnClick);
+inputText.addEventListener('keyup', inputTextOnKeyUp);
 
-function transcriptButtonOnclick() {
+function transcriptButtonOnClick() {
     inputText.value = transcriptString(inputText.value);
+}
+
+function inputTextOnKeyUp(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        transcript.click();
+    }
 }
 
 function transcriptString(str) {
