@@ -1,9 +1,33 @@
-transcript.addEventListener('click', transcriptButtonOnClick);
-inputText.addEventListener('keyup', inputTextOnKeyUp);
+document.getElementById('transcript').addEventListener('click', transcriptButtonOnClick);
+document.getElementById('inputText').addEventListener('keyup', inputTextOnKeyUp);
+document.getElementById('clearHistory').addEventListener('click', clearHistory);
+
+// function transcriptButtonOnClick() {
+//     let oldInputText = inputText.value;
+//     let newInputText = transcriptString(inputText.value);
+//     inputText.value = newInputText;
+//     let d = new Date();
+//     let p = document.createElement("p");
+//     let text = document.createTextNode(d.toLocaleString() + oldInputText + " ==> " + newInputText);
+//     p.appendChild(text);
+//     document.getElementById('history').prepend(p);
+// }
 
 function transcriptButtonOnClick() {
-    inputText.value = transcriptString(inputText.value);
+    let oldInputText = inputText.value;
+    let newInputText = transcriptString(inputText.value);
+    inputText.value = newInputText;
+    let d = new Date();
+    let p = document.createElement("p");
+    let span = document.createElement("span");
+    let date = document.createTextNode(d.toLocaleString());
+    let text = document.createTextNode(oldInputText + " ==> " + newInputText);
+    span.appendChild(date);
+    p.appendChild(span);
+    p.appendChild(text);
+    document.getElementById('history').prepend(p);
 }
+
 
 function inputTextOnKeyUp(event) {
     if (event.keyCode === 13) {
@@ -46,4 +70,8 @@ function determineCharset(str, charset) {
         }
     }
     return result;
+}
+
+function clearHistory(){
+    document.getElementById('history').innerHTML = "";
 }
