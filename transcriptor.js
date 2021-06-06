@@ -2,25 +2,30 @@ document.getElementById('transcript').addEventListener('click', transcriptButton
 document.getElementById('inputText').addEventListener('keyup', inputTextOnKeyUp);
 document.getElementById('clearHistory').addEventListener('click', clearHistory);
 document.getElementById('copyToClipboard').addEventListener('click', copyToClipboard);
-
+displayFromStorage();
 
 function transcriptButtonOnClick() {
     let oldInputText = inputText.value;
     if (oldInputText.trim().length === 0) return;
     let newInputText = transcriptString(inputText.value);
     inputText.value = newInputText;
-    let d = new Date();
+    let dStr = new Date().toLocaleString();
+    displayHistoryItem(oldInputText, newInputText, dStr);
+    addItemToStorage(oldInputText, newInputText, dStr);
+}
+
+
+function displayHistoryItem(oldInputText, newInputText, dStr) {
     let p = document.createElement("p");
     let span = document.createElement("span");
     span.classList.add("time");
-    let date = document.createTextNode(d.toLocaleString());
+    let date = document.createTextNode(dStr);
     let text = document.createTextNode(oldInputText + " ==> " + newInputText);
     span.appendChild(date);
     p.appendChild(span);
     p.appendChild(text);
     document.getElementById('history').prepend(p);
 }
-
 
 function inputTextOnKeyUp(event) {
     if (event.keyCode === 13) {
@@ -67,8 +72,31 @@ function determineCharset(str, charset) {
 
 function clearHistory() {
     document.getElementById('history').innerHTML = "";
+    clearStorage();
 }
 
 function copyToClipboard() {
     navigator.clipboard.writeText(inputText.value);
+}
+
+function addItemToStorage(inStr, outStr, dateStr) {
+    let n = +(localStorage.getItem('n') || 0) + 1;
+    localStorage.setItem('inStr' + n, inStr);
+    localStorage.setItem('outStr' + n, outStr);
+    localStorage.setItem('dateStr' + n, dateStr);
+    localStorage.setItem('n', n);
+}
+
+function clearStorage() {
+    localStorage.clear();
+}
+
+function displayFromStorage() {
+    let n = +(localStorage.getItem('n') || 0);
+    for (let i = 1; i <= n; i++) {        
+        let inStr = localStorage.getItem('inStr' + i);
+        let outStr = localStorage.getItem('outStr' + i);
+        let dateStr = localStorage.getItem('dateStr' + i);
+        displayHistoryItem(inStr, outStr, dateStr);
+    }
 }
