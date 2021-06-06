@@ -1,25 +1,18 @@
 document.getElementById('transcript').addEventListener('click', transcriptButtonOnClick);
 document.getElementById('inputText').addEventListener('keyup', inputTextOnKeyUp);
 document.getElementById('clearHistory').addEventListener('click', clearHistory);
+document.getElementById('copyToClipboard').addEventListener('click', copyToClipboard);
 
-// function transcriptButtonOnClick() {
-//     let oldInputText = inputText.value;
-//     let newInputText = transcriptString(inputText.value);
-//     inputText.value = newInputText;
-//     let d = new Date();
-//     let p = document.createElement("p");
-//     let text = document.createTextNode(d.toLocaleString() + oldInputText + " ==> " + newInputText);
-//     p.appendChild(text);
-//     document.getElementById('history').prepend(p);
-// }
 
 function transcriptButtonOnClick() {
     let oldInputText = inputText.value;
+    if (oldInputText.trim().length === 0) return;
     let newInputText = transcriptString(inputText.value);
     inputText.value = newInputText;
     let d = new Date();
     let p = document.createElement("p");
     let span = document.createElement("span");
+    span.classList.add("time");
     let date = document.createTextNode(d.toLocaleString());
     let text = document.createTextNode(oldInputText + " ==> " + newInputText);
     span.appendChild(date);
@@ -72,6 +65,10 @@ function determineCharset(str, charset) {
     return result;
 }
 
-function clearHistory(){
+function clearHistory() {
     document.getElementById('history').innerHTML = "";
+}
+
+function copyToClipboard() {
+    navigator.clipboard.writeText(inputText.value);
 }
